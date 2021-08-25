@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "sagat9011",
+    "database": "database_development_finalgroupomania",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "sagat9011",
+    "database": "database_development_finalgroupomania",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "sagat9011",
+    "database": "database_development_finalgroupomania",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
