@@ -33,7 +33,7 @@ module.exports = {
 				allowNull: true,
 				type: Sequelize.STRING,
 			},
-			profilePhoto: {
+			avatar: {
 				allowNull: true,
 				type: Sequelize.STRING,
 			},

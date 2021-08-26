@@ -1,5 +1,5 @@
 // Imports
-const express = require("express"); //framework
+const express = require("express");
 const path = require("path");
 
 // Variable Routes
@@ -21,7 +21,6 @@ app.use((req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// images in a static file
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 //Config routes
@@ -30,5 +29,4 @@ app.use("/api/users", userRoutes);
 // app.use("/api/posts", postRoutes);
 // app.use("/api/comments", commentRoutes);
 
-// Export app
 module.exports = app;

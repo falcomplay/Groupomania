@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
 			bio: DataTypes.STRING,
 			firstname: DataTypes.STRING,
 			lastname: DataTypes.STRING,
-			profilePhoto: DataTypes.STRING,
+			avatar: DataTypes.STRING,
 			isAdmin: DataTypes.BOOLEAN,
 		},
 		{

@@ -24,7 +24,7 @@ exports.findOneProfile = (req, res, next) => {
 
 exports.findFriendProfile = (req, res, next) => {
 	models.User.findOne({
-		attributes: ["id", "firstname", "lastname", "username", "bio", "profilePhoto"],
+		attributes: ["id", "firstname", "lastname", "username", "bio", "avatar"],
 		where: { id: req.params.id },
 	})
 		.then((user) => {
@@ -63,7 +63,7 @@ exports.updateUserProfile = async function (req, res) {
 	const bio = req.body.bio;
 
 	await models.User.findOne({
-		attributes: ["id", "bio", "firstname", "lastname", "profilePhoto"],
+		attributes: ["id", "bio", "firstname", "lastname", "avatar"],
 		where: { id: userId },
 	})
 		.then(async function (userFound) {
@@ -74,7 +74,7 @@ exports.updateUserProfile = async function (req, res) {
 						lastname: lastname ? lastname : userFound.lastname,
 						username: username ? username : userFound.username,
 						bio: bio ? bio : userFound.bio,
-						profilePhoto: req.file ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}` : userFound.profilePhoto,
+						avatar: req.file ? `${req.protocol}://${req.get("host")}/images/${req.file.filename}` : userFound.avatar,
 					})
 					.then(function () {
 						res.status(200).json({ message: "Utilisateur mis à jour !" });
@@ -101,8 +101,8 @@ exports.deleteOneUser = async (req, res) => {
 		const user = await models.User.findOne({ where: { id: req.params.userId } });
 
 		if (userId === user.id || isAdmin === true) {
-			if (user.profilePhoto !== null) {
-				const filename = user.profilePhoto.split("/images/")[1];
+			if (user.avatar !== null) {
+				const filename = user.avatar.split("/images/")[1];
 				fs.unlink(`images/${filename}`, () => {
 					user.destroy({
 						where: { id: req.params.userId },
