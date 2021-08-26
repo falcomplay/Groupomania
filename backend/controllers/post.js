@@ -112,7 +112,7 @@ exports.deleteOnePost = async (req, res) => {
 					res.status(404).json({ error: "Problème authentification" });
 				}
 			} catch (err) {
-				return res.status(500).json({ err: "haha" });
+				return res.status(500).json({ err: "Vous ne pouvez pas faire ça" });
 			}
 		})
 		.catch(function (err) {
