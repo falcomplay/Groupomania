@@ -4,8 +4,8 @@ const path = require("path");
 
 // Variable Routes
 const loginRoutes = require("./routes/login");
-// const userRoutes = require("./routes/user");
-// const postRoutes = require("./routes/post");
+const userRoutes = require("./routes/user");
+const postRoutes = require("./routes/post");
 // const commentRoutes = require("./routes/comment");
 
 // Instantiate server
@@ -18,7 +18,6 @@ app.use((req, res, next) => {
 	next();
 });
 
-// Parser du JSON pour récup les paramètres dans le body de la requête
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -27,7 +26,7 @@ app.use("/images", express.static(path.join(__dirname, "images")));
 
 //Config routes
 app.use("/api/auth", loginRoutes);
-// app.use("/api/users", userRoutes);
+app.use("/api/users", userRoutes);
 // app.use("/api/posts", postRoutes);
 // app.use("/api/comments", commentRoutes);
 
