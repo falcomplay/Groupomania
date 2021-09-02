@@ -7,12 +7,6 @@
 			<form id="form" class="mt-3 mb-4" novalidate="true">
 				<div class="form-group form-group-sm">
 					<div class="col mx-auto position-relative">
-						<label for="pseudo">Pseudo</label>
-						<input id="pseudo" name="pseudo" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
-					</div>
-				</div>
-				<div class="form-group form-group-sm">
-					<div class="col mx-auto position-relative">
 						<label for="email">Email</label>
 						<input id="email" name="email" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
 					</div>
@@ -23,16 +17,12 @@
 						<input id="password" name="password" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
 					</div>
 				</div>
-				<div class="form-group form-group-sm">
-					<div class="col mx-auto position-relative">
-						<label for="confirmation">Confirmation</label>
-						<input id="confirmation" name="confirmation" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
-					</div>
-				</div>
-				<button class="btn btn-sm mt-3" type="submit">S'inscrire</button>
+				<button class="btn btn-sm mt-3" type="submit">Se connecter</button>
 			</form>
 			<div class="pt-5">
-				<p>Déjà inscrit ? Vous connectez <a href="#">ici !</a></p>
+				<p>
+					Pas de compte ? Inscrivez vous <router-link :to="{ path: '/' }"><a>ici !</a></router-link>
+				</p>
 			</div>
 		</div>
 	</div>
@@ -40,7 +30,7 @@
 
 <script>
 export default {
-	name: "HelloWorld",
+	name: "Login",
 	props: {},
 };
 </script>
