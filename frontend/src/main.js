@@ -5,6 +5,7 @@ import Vuelidate from "vuelidate";
 
 import "./styles/app.scss";
 import router from "./router";
+import store from './store'
 
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
@@ -12,6 +13,7 @@ Vue.use(Vuelidate);
 
 /* eslint-disable no-new */
 new Vue({
-	router,
-	render: (h) => h(App),
+    router,
+    store,
+    render: (h) => h(App)
 }).$mount("#app");

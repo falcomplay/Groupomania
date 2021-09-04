@@ -6,6 +6,11 @@ Vue.use(VueRouter);
 const routes = [
 	{
 		path: "/",
+		name: "Home",
+		component: () => import("../views/Home.vue"),
+	},
+	{
+		path: "/signup",
 		name: "Signup",
 		component: () => import("../views/Signup.vue"),
 	},
@@ -17,6 +22,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+	mode: "history",
 	routes,
 });
 
