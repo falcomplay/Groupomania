@@ -3,12 +3,12 @@
 		<div class="card col-10 col-lg-5 mx-auto bg-white py-4">
 			<div class="ml-3 d-flex flex-row">
 				<img alt="image-profil" class="h-12 w-12 rounded-full" />
-				<p class="font-semibold">Test</p>
-				<p class="font-thin text-sm">Date</p>
+				<p class="font-semibold">{{ post.User.username }}/p></p>
+				<p class="font-thin text-sm">{{ post.createdAt.substr(0, 10).split("-").reverse().join("-") }}</p>
 				<button name="delete" class="ml-auto w-8 h-8">Delete</button>
 			</div>
-			<h1 class="h3 text-secondary mt-3">Bienvenue chez groupamania</h1>
-			<p>Rejoignez Groupomania maintenant pour entrer en contact avec la communauté</p>
+			<h1 class="h3 text-secondary mt-3">{{ post.title }}</h1>
+			<p>{{ post.content }}</p>
 			<img id="post_img" alt="image-post" />
 			<div class="flex w-full flex-col justify-center bg-red-50 mt-4 py-2">
 				<div class="flex">
@@ -36,6 +36,79 @@
 	</div>
 </template>
 
-<script></script>
+<script>
+import { required, maxLength } from "vuelidate/lib/validators";
+import axios from "axios";
+
+export default {
+	name: "Allpost",
+	data() {
+		return {
+			token: localStorage.getItem("token"),
+			userId: parseInt(localStorage.getItem("userId")),
+			username: localStorage.getItem("username"),
+			isAdmin: localStorage.getItem("isAdmin"),
+
+			posts: [],
+			comments: [],
+			currentUser: [],
+			user: {
+				username: "",
+				avatar: "",
+				id: "",
+				isAdmin: "",
+			},
+			newComment: "",
+
+			// ALERTS MESSAGES
+			errorDeletePost: false,
+			confirmDeletePost: false,
+			errorDeleteCom: false,
+			confirmDeleteCom: false,
+			errorComPost: false,
+			confirmComPost: false,
+		};
+	},
+
+	validations: {
+		newComment: { required, maxLength: maxLength(140) },
+	},
+	async created() {
+		// GET CURRENT USER
+		await axios
+			.get("http://localhost:3000/api/users/", {
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					Authorization: "Bearer " + this.token,
+				},
+			})
+			.then((response) => {
+				this.currentUser = response.data;
+				console.log(response);
+			})
+			.catch((e) => {
+				console.log(e + "User inconnu");
+			});
+
+		// GET ALL POSTS
+		await axios
+			.get("http://localhost:3000/api/posts", {
+				headers: {
+					"Content-Type": "multipart/form-data",
+					Authorization: "Bearer " + this.token,
+				},
+			})
+			.then((response) => {
+				this.posts = response.data;
+				console.log(response);
+			})
+			.catch((e) => {
+				console.log(e + "User inconnu ou Posts indisponibles");
+				this.$router.push("/login");
+				window.alert("Veuillez vous connecter pour accéder au site");
+			});
+	},
+};
+</script>
 
 <style scoped></style>

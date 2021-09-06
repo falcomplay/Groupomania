@@ -28,11 +28,11 @@
 						<input id="confirmation" name="confirmation" type="password" class="col-7 col-lg-6 mx-auto form-control form-control-sm" v-model.trim="$v.confirmation.$model" required />
 					</div>
 				</div>
-				<button class="btn btn-sm mt-3" type="submit" v-on:click="signup">S'inscrire</button>
+				<button class="btn btn-sm mt-3" type="submit" @click.prevent="signup">S'inscrire</button>
 			</form>
 			<div class="pt-5">
 				<p>
-					Déjà inscrit ? Connectez vous<router-link :to="{ path: '/Login' }"><a> ici !</a></router-link>
+					Déjà inscrit ? Connectez vous<router-link :to="{ path: '/' }"><a> ici !</a></router-link>
 				</p>
 			</div>
 		</div>
@@ -96,7 +96,7 @@ export default {
 						.then(() => {
 							alert("Compte créé avec succès");
 							localStorage.setItem("username", this.username);
-							this.$router.push("Login");
+							this.$router.push("Home");
 						})
 						.catch((error) => {
 							if (error.response) {
@@ -112,7 +112,6 @@ export default {
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
 	margin: 40px 0 0;
