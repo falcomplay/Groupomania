@@ -21,7 +21,7 @@
 			</form>
 			<div class="pt-5">
 				<p>
-					Pas de compte ? Inscrivez vous <router-link :to="{ path: '/' }"><a>ici !</a></router-link>
+					Pas de compte ? Inscrivez vous <router-link :to="{ path: '/signup' }"><a>ici !</a></router-link>
 				</p>
 			</div>
 		</div>
@@ -29,9 +29,59 @@
 </template>
 
 <script>
+import { email, required, minLength } from "vuelidate/lib/validators";
+import axios from "axios";
+
 export default {
-	name: "Login",
-	props: {},
+	name: "login",
+	data() {
+		return {
+			email: "",
+			password: "",
+			submited: false,
+			isActive: true,
+			errorAlert: false,
+		};
+	},
+
+	validations: {
+		email: {
+			email,
+			required,
+		},
+		password: {
+			required,
+			minLength: minLength(6),
+		},
+	},
+	methods: {
+		activatedBtn() {
+			const email = document.getElementById("email").value;
+			const password = document.getElementById("password").value;
+			if (email !== null && password !== null) {
+				this.isActive = false;
+			}
+		},
+
+		login() {
+			this.errorAlert = false; // reboot alert before each try
+
+			axios
+				.post("http://localhost:3000/api/auth/login", {
+					email: this.email,
+					password: this.password,
+				})
+				.then((res) => {
+					localStorage.setItem("token", res.data.token);
+					localStorage.setItem("userId", res.data.userId);
+					localStorage.setItem("isAdmin", res.data.isAdmin);
+					this.$router.push("/");
+				})
+				.catch(() => {
+					this.errorAlert = true;
+				});
+		},
+	},
 };
 </script>
 
