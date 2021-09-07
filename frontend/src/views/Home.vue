@@ -1,114 +1,24 @@
 <template>
 	<div class="home">
 		<Navbar />
-		<Post v-for="post in posts" :key="post.id">
-			<template v-slot:Posts v-if="posts !== null">
-				<div class="pt-3 pb-5">
-					<div class="card col-10 col-lg-5 mx-auto bg-white py-4">
-						<div class="ml-3 d-flex flex-row">
-							<img alt="image-profil" class="h-12 w-12 rounded-full" />
-							<p class="font-semibold">{{ post.User.username }}/p></p>
-							<p class="font-thin text-sm">{{ post.createdAt.substr(0, 10).split("-").reverse().join("-") }}</p>
-							<button name="delete" class="ml-auto w-8 h-8">Delete</button>
-						</div>
-						<h1 class="h3 text-secondary mt-3">{{ post.title }}</h1>
-						<p>{{ post.content }}</p>
-						<img id="post_img" alt="image-post" />
-					</div>
-				</div>
-			</template>
-		</Post>
+		<AllPost />
 	</div>
 </template>
 
 <script>
-// @ is an alias to /src
 import Navbar from "@/components/Navbar.vue";
-import Post from "@/components/Post.vue";
-
-import { required, maxLength } from "vuelidate/lib/validators";
-import axios from "axios";
-
+import AllPost from "@/components/AllPost.vue";
+// import Amis from '@/components/Amis.vue';
 export default {
+	created() {
+		this.$store.dispatch("getUsers");
+		this.$store.dispatch("getUserInfos");
+		this.$store.dispatch("getPostsInfos");
+	},
 	name: "Home",
 	components: {
 		Navbar,
-		Post,
-	},
-	data() {
-		return {
-			token: localStorage.getItem("token"),
-			userId: parseInt(localStorage.getItem("userId")),
-			username: localStorage.getItem("username"),
-			isAdmin: localStorage.getItem("isAdmin"),
-
-			posts: [],
-			comments: [],
-			currentUser: [],
-			user: {
-				username: "",
-				avatar: "",
-				id: "",
-				isAdmin: "",
-			},
-			newComment: "",
-
-			// ALERTS MESSAGES
-			errorDeletePost: false,
-			confirmDeletePost: false,
-			errorDeleteCom: false,
-			confirmDeleteCom: false,
-			errorComPost: false,
-			confirmComPost: false,
-		};
-	},
-
-	validations: {
-		newComment: { required, maxLength: maxLength(140) },
-	},
-	async created() {
-		// GET CURRENT USER
-		await axios
-			.get("http://localhost:3000/api/users/", {
-				headers: {
-					"Content-Type": "application/x-www-form-urlencoded",
-					Authorization: "Bearer " + this.token,
-				},
-			})
-			.then((response) => {
-				this.currentUser = response.data;
-				console.log(response);
-			})
-			.catch((e) => {
-				console.log(e + "User inconnu");
-			});
-
-		// GET ALL POSTS
-		await axios
-			.get("http://localhost:3000/api/posts", {
-				headers: {
-					"Content-Type": "multipart/form-data",
-					Authorization: "Bearer " + this.token,
-				},
-			})
-			.then((response) => {
-				this.posts = response.data;
-				console.log(response);
-			})
-			.catch((e) => {
-				console.log(e + "User inconnu ou Posts indisponibles");
-				this.$router.push("/login");
-				window.alert("Veuillez vous connecter pour accéder au site");
-			});
+		AllPost,
 	},
 };
 </script>
-
-<style scoped>
-img {
-	width: 50%;
-	min-width: 220px;
-	max-width: 500px;
-	margin-bottom: 20px;
-}
-</style>

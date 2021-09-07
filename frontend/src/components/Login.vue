@@ -1,85 +1,108 @@
 <template>
 	<div class="pt-3 pb-5">
 		<div class="card col-10 col-lg-6 mx-auto bg-white py-4">
-			<h1 class="h3 text-secondary mt-3">Bienvenue chez groupamania</h1>
-			<p>Rejoignez Groupomania maintenant pour entrer en contact avec la communauté</p>
-			<p></p>
-			<form id="form" class="mt-3 mb-4" novalidate="true">
-				<div class="form-group form-group-sm">
-					<div class="col mx-auto position-relative">
-						<label for="email">Email</label>
-						<input id="email" name="email" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
-					</div>
+			<h1 class="h2 mt-3" v-if="mode == 'signup'">Bienvenue chez groupamania</h1>
+			<p v-if="mode == 'signup'">Rejoignez Groupomania maintenant pour entrer en contact avec la communauté</p>
+			<h2 class="card__title h3" v-if="mode == 'login'">Connexion</h2>
+			<h2 class="card__title h3" v-else>Inscription</h2>
+			<form id="form" class="mt-3" novalidate="true">
+				<div class="col mx-auto position-relative">
+					<input v-model="email" class="col-7 col-lg-6 mx-auto form-control form-control-sm" type="text" placeholder="Adresse mail" />
 				</div>
-				<div class="form-group form-group-sm">
-					<div class="col mx-auto position-relative">
-						<label for="password">Mot de passe</label>
-						<input id="password" name="password" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
-					</div>
+				<div class="col mx-auto position-relative my-3" v-if="mode == 'signup'">
+					<input v-model="username" class="col-7 col-lg-6 mx-auto form-control form-control-sm" type="text" placeholder="Pseudo" />
 				</div>
-				<button class="btn btn-sm mt-3" type="submit" @click.prevent="login">Se connecter</button>
+				<div class="col mx-auto position-relative my-3">
+					<input v-model="password" class="col-7 col-lg-6 mx-auto form-control form-control-sm" type="password" placeholder="Mot de passe" />
+				</div>
+				<div class="col mx-auto position-relative alert" v-if="mode == 'login' && status == 'error_login'">Adresse mail/mot de passe invalide</div>
+				<div class="col mx-auto position-relative alert" v-if="mode == 'signup' && status == 'error_signup'">Adresse mail déjà utilisée</div>
 			</form>
-			<div class="pt-5">
-				<p>
-					Pas de compte ? Inscrivez vous <router-link :to="{ path: '/signup' }"><a>ici !</a></router-link>
-				</p>
+			<div class="mb-3">
+				<button @click="login()" name="login" class="btn btn-sm" :class="{ 'button--disabled': !validatedFields }" v-if="mode == 'login'">
+					<span v-if="status == 'loading'">Connexion en cours...</span>
+					<span v-else>Connexion</span>
+				</button>
+				<button @click="signup()" name="signup" class="btn btn-sm" :class="{ 'button--disabled': !validatedFields }" v-else>
+					<span v-if="status == 'loading'">Création en cours...</span>
+					<span v-else>Créer mon compte</span>
+				</button>
 			</div>
+			<p class="pt-3" v-if="mode == 'login'">Pas de compte ? <a class="link" @click="switchToSignup()">Inscrivez vous</a></p>
+			<p class="pt-3" v-else>Déjà inscrit ? <a class="link" @click="switchToLogin()"> Connectez vous</a></p>
 		</div>
 	</div>
 </template>
 
 <script>
-import { email, required, minLength } from "vuelidate/lib/validators";
-import axios from "axios";
-
+import { mapState } from "vuex";
 export default {
-	name: "login",
-	data() {
+	name: "Login",
+	data: function () {
 		return {
+			mode: "login",
 			email: "",
+			username: "",
 			password: "",
-			submited: false,
-			isActive: true,
-			errorAlert: false,
 		};
 	},
-
-	validations: {
-		email: {
-			email,
-			required,
+	computed: {
+		validatedFields: function () {
+			if (this.mode == "signup") {
+				if (this.email != "" && this.username != "" && this.password != "") {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				if (this.email != "" && this.password != "") {
+					return true;
+				} else {
+					return false;
+				}
+			}
 		},
-		password: {
-			required,
-			minLength: minLength(6),
-		},
+		...mapState(["status"]),
 	},
 	methods: {
-		// activatedBtn() {
-		// 	const email = document.getElementById("email").value;
-		// 	const password = document.getElementById("password").value;
-		// 	if (email !== null && password !== null) {
-		// 		this.isActive = false;
-		// 	}
-		// },
-
-		login() {
-			this.errorAlert = false; // reboot alert before each try
-
-			axios
-				.post("http://localhost:3000/api/auth/login", {
+		switchToSignup: function () {
+			this.mode = "signup";
+		},
+		switchToLogin: function () {
+			this.mode = "login";
+		},
+		login: function () {
+			const self = this;
+			this.$store
+				.dispatch("login", {
 					email: this.email,
 					password: this.password,
 				})
-				.then((res) => {
-					localStorage.setItem("token", res.data.token);
-					localStorage.setItem("userId", res.data.userId);
-					localStorage.setItem("isAdmin", res.data.isAdmin);
-					this.$router.push("/home");
+				.then(
+					function () {
+						self.$router.push("/home");
+					},
+					function (error) {
+						console.log(error);
+					}
+				);
+		},
+		signup: function () {
+			const self = this;
+			this.$store
+				.dispatch("signup", {
+					email: this.email,
+					username: this.username,
+					password: this.password,
 				})
-				.catch(() => {
-					this.errorAlert = true;
-				});
+				.then(
+					function () {
+						self.login();
+					},
+					function (error) {
+						console.log(error);
+					}
+				);
 		},
 	},
 };
@@ -102,7 +125,8 @@ li {
 	background-color: #192946;
 	color: white;
 }
-a {
+a,
+.alert {
 	color: #b12f38;
 }
 </style>
