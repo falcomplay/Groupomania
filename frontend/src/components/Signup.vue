@@ -96,7 +96,7 @@ export default {
 						.then(() => {
 							alert("Compte créé avec succès");
 							localStorage.setItem("username", this.username);
-							this.$router.push("Home");
+							this.$router.push("/");
 						})
 						.catch((error) => {
 							if (error.response) {

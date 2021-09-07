@@ -17,7 +17,7 @@
 						<input id="password" name="password" type="text" class="col-7 col-lg-6 mx-auto form-control form-control-sm" required />
 					</div>
 				</div>
-				<button class="btn btn-sm mt-3" type="submit">Se connecter</button>
+				<button class="btn btn-sm mt-3" type="submit" @click.prevent="login">Se connecter</button>
 			</form>
 			<div class="pt-5">
 				<p>
@@ -55,13 +55,13 @@ export default {
 		},
 	},
 	methods: {
-		activatedBtn() {
-			const email = document.getElementById("email").value;
-			const password = document.getElementById("password").value;
-			if (email !== null && password !== null) {
-				this.isActive = false;
-			}
-		},
+		// activatedBtn() {
+		// 	const email = document.getElementById("email").value;
+		// 	const password = document.getElementById("password").value;
+		// 	if (email !== null && password !== null) {
+		// 		this.isActive = false;
+		// 	}
+		// },
 
 		login() {
 			this.errorAlert = false; // reboot alert before each try
