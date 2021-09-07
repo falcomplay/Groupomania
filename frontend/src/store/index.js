@@ -59,6 +59,10 @@ export default new Vuex.Store({
 		getPosts: function (state, posts) {
 			state.posts = posts;
 		},
+		deletePost: function (state, post) {
+			let posts = state.posts.filter((p) => p.id != post.id);
+			state.posts = posts;
+		},
 		logout: function (state) {
 			state.user = {
 				userId: -1,
@@ -84,7 +88,7 @@ export default new Vuex.Store({
 					});
 			});
 		},
-		createAccount: ({ commit }, userInfos) => {
+		signup: ({ commit }, userInfos) => {
 			commit("setStatus", "loading");
 			return new Promise((resolve, reject) => {
 				commit;
@@ -121,6 +125,14 @@ export default new Vuex.Store({
 				.get("/posts")
 				.then(function (response) {
 					commit("getPosts", response.data.posts);
+				})
+				.catch(function () {});
+		},
+		deletePost: ({ commit }, post) => {
+			instance
+				.delete(`/posts/${post.id}`)
+				.then(function (response) {
+					if (response.status == 200 || response.status == 204) commit("deletePost", post.id);
 				})
 				.catch(function () {});
 		},

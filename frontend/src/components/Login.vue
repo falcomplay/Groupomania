@@ -71,22 +71,6 @@ export default {
 		switchToLogin: function () {
 			this.mode = "login";
 		},
-		login: function () {
-			const self = this;
-			this.$store
-				.dispatch("login", {
-					email: this.email,
-					password: this.password,
-				})
-				.then(
-					function () {
-						self.$router.push("/home");
-					},
-					function (error) {
-						console.log(error);
-					}
-				);
-		},
 		signup: function () {
 			const self = this;
 			this.$store
@@ -98,6 +82,22 @@ export default {
 				.then(
 					function () {
 						self.login();
+					},
+					function (error) {
+						console.log(error);
+					}
+				);
+		},
+		login: function () {
+			const self = this;
+			this.$store
+				.dispatch("login", {
+					email: this.email,
+					password: this.password,
+				})
+				.then(
+					function () {
+						self.$router.push("/home");
 					},
 					function (error) {
 						console.log(error);

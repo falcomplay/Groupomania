@@ -1,39 +1,39 @@
 <template>
 	<div class="w-full flex-1 md:w-1/2 h-screen md:overflow-y-scroll">
-		<div class="px-5 py-3 border-b border-lighter flex items-center justify-between">
-			<h1 class="text-xl font-bold">Accueil</h1>
-			<i class="far fa-star text-xl text-red-300"></i>
-		</div>
 		<div class="px-5 py-3 border-b-8 border-lighter flex">
-			<div class="flex-none">
+			<!-- <div class="flex-none">
 				<img v-if="user.avatar === null" src="#" class="h-10 w-10 rounded-full flex-none" />
 				<img v-else :src="user.avatar" class="h-10 w-10 rounded-full flex-none" />
+			</div> -->
+			<div class="card col-12 col-lg-8 col-xl-6 mx-auto bg-white py-4">
+				<form @submit.prevent="submit">
+					<div>
+						<input v-model="title" id="title" type="text" placeholder="Titre" class="mt-3 col-lg-4" />
+					</div>
+					<div class="flex">
+						<div>
+							<textarea v-model="content" id="content" placeholder="Quoi de neuf ?" maxlength="150" rows="3" class="mt-3 col-lg-4" />
+						</div>
+						<div class="pb-9 flex items-center">
+							<label class="mb-3 text-primary" for="attachment" />
+							<button name="send-image" @click="$refs.image.click()">Ajouter</button>
+							<input style="display: none" type="file" ref="image" @change="onFileSelected()" />
+						</div>
+					</div>
+					<div v-if="submitStatus == 'error_create'" class="alert">Il manque l'un des paramètres, veuillez tout remplir !</div>
+					<div class="mt-3">
+						<button :class="{ 'button--disabled': !validatedFields }" name="send-post" class="btn px-4">
+							<span v-if="submitStatus == 'loading'">Envoie...</span>
+							<span v-else>Publier</span>
+						</button>
+					</div>
+				</form>
 			</div>
-			<form @submit.prevent="submit" class="w-full px-4">
-				<div>
-					<input v-model="title" id="title" type="text" placeholder="Titre" class="mt-3 pb-3 w-full focus:outline-none" />
-				</div>
-				<div>
-					<input v-model="content" id="content" placeholder="Quoi de neuf ?" class="mt-3 pb-3 w-full focus:outline-none" />
-				</div>
-				<div class="pb-9 flex items-center">
-					<label class="mb-3 text-primary" for="attachment" />
-					<button name="send-image" @click="$refs.image.click()"><i class="text-lg text-red-300 mr-4 far fa-image"></i></button>
-					<input style="display: none" type="file" ref="image" @change="onFileSelected()" />
-				</div>
-				<div v-if="submitStatus == 'error_create'" class="text-red-600">Il manque l'un des paramètres, veuillez tout remplir !</div>
-				<div>
-					<button :class="{ 'button--disabled': !validatedFields }" name="send-post" class="h-10 px-4 text-white font-semibold bg-red-600 hover:bg-red-400 focus:outline-none rounded-full">
-						<span v-if="submitStatus == 'loading'">Envoie...</span>
-						<span v-else>Publier</span>
-					</button>
-				</div>
-			</form>
 		</div>
-		<div class="flex flex-col">
+		<div class="col-10 col-lg-8 col-xl-6 mx-auto my-3 py-4">
 			<div v-for="(post, id) in posts.slice().reverse()" class="flex flex-col-reverse" :key="id">
-				<div class="w-full p-4 border-b hover:bg-lighter flex flex-col">
-					<div class="flex mr-4">
+				<div class="card col-12 col-lg-8 col-xl-6 mx-auto my-5 bg-white py-4">
+					<div class="ml-3 d-flex flex-row">
 						<img
 							v-if="
 								users
@@ -56,23 +56,14 @@
 							<p class="font-semibold">{{ post.username }}</p>
 							<p class="font-thin text-sm">{{ dateTime(post.createdAt) }}</p>
 						</div>
-						<button v-if="user.id == post.UserId || user.isAdmin == 1" @click="deletePost(post)" name="delete" class="ml-auto">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 fill-content hover:text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-								/>
-							</svg>
-						</button>
+						<button v-if="user.id == post.UserId || user.isAdmin == 1" @click="deletePost(post)" name="delete" class="btn">x</button>
 					</div>
 					<div class="w-full">
 						<h2 class="text-base text-center py-2">{{ post.title }}</h2>
 						<div class="flex align-center justify-center">
 							<img
 								id="post_img"
-								v-if="post.attachment !== '' && post.attachment !== null && (post.attachment.split('.')[2] === 'png' || 'jpg')"
+								v-if="post.attachment !== '' && post.attachment !== null && (post.attachment.split('.')[2] === 'gif' || 'png' || 'jpg')"
 								:src="post.attachment"
 								alt="image-video"
 							/>
@@ -173,4 +164,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.alert {
+	color: #b12f38;
+}
+.btn {
+	background-color: #192946;
+	color: white;
+}
+textarea {
+	resize: none;
+}
+</style>
