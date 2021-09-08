@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
 			title: {
 				type: DataTypes.STRING,
 				validate: {
-					min: 2,
+					min: 3,
 					notEmpty: true,
 				},
 			},

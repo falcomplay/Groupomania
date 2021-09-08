@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
 				type: DataTypes.STRING,
 				validate: {
 					notEmpty: true,
-					min: 2,
+					min: 3,
 				},
 			},
 		},

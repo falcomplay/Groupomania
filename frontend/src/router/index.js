@@ -23,6 +23,15 @@ const routes = [
 			requiresAuth: true,
 		},
 	},
+	{
+		name: "post",
+		path: "/post/:id",
+		component: () => import("../views/Post.vue"),
+		meta: {
+			title: "Post",
+			requiresAuth: true,
+		},
+	},
 ];
 
 const router = new VueRouter({
@@ -34,7 +43,7 @@ router.beforeEach((to, from, next) => {
 	if (to.matched.some((routes) => routes.meta.requiresAuth)) {
 		if (!store.state.user.token) {
 			next({
-				name: "login",
+				name: "Login",
 			});
 		} else {
 			next();
@@ -42,7 +51,7 @@ router.beforeEach((to, from, next) => {
 	} else if (to.matched.some((routes) => routes.meta.requiresVisitor)) {
 		if (store.state.user.token) {
 			next({
-				name: "home",
+				name: "home" || "post",
 			});
 		} else {
 			next();

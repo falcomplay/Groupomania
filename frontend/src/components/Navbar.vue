@@ -8,7 +8,7 @@
 					<b-navbar-nav class="ml-auto">
 						<div class="d-flex justify-content-end align-items-center">
 							<b-nav-item size="sm" class="mr-3 font-weight-bold">Mon Compte</b-nav-item>
-							<b-nav-item size="sm" class="mr-2 font-weight-bold">Se déconnecter</b-nav-item>
+							<span @click="logout()"><b-nav-item size="sm" class="mr-2 font-weight-bold">Se déconnecter</b-nav-item></span>
 						</div>
 					</b-navbar-nav>
 				</b-collapse>
@@ -17,7 +17,16 @@
 	</div>
 </template>
 
-<script></script>
+<script>
+export default {
+	methods: {
+		logout: function () {
+			this.$store.commit("logout");
+			this.$router.push("/");
+		},
+	},
+};
+</script>
 
 <style scoped>
 img {
