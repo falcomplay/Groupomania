@@ -32,6 +32,15 @@ const routes = [
 			requiresAuth: true,
 		},
 	},
+	{
+		name: "profile",
+		path: "/profile",
+		component: () => import("../views/Profile.vue"),
+		meta: {
+			title: "Profile",
+			requiresAuth: true,
+		},
+	},
 ];
 
 const router = new VueRouter({
@@ -51,7 +60,7 @@ router.beforeEach((to, from, next) => {
 	} else if (to.matched.some((routes) => routes.meta.requiresVisitor)) {
 		if (store.state.user.token) {
 			next({
-				name: "home" || "post",
+				name: "home" || "post" || "profile",
 			});
 		} else {
 			next();

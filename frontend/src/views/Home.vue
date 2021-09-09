@@ -8,7 +8,7 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import AllPost from "@/components/AllPost.vue";
-// import Amis from '@/components/Amis.vue';
+
 export default {
 	created() {
 		this.$store.dispatch("getUsers");

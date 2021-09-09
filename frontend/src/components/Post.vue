@@ -26,13 +26,7 @@
 				<div>
 					<h2 class="text-base text-center py-2">{{ post.title }}</h2>
 					<div class="flex align-center justify-center">
-						<img
-							class="w-100"
-							id="post_img"
-							v-if="post.attachment !== '' && post.attachment !== null && (post.attachment.split('.')[2] === 'gif' || 'png' || 'jpg')"
-							:src="post.attachment"
-							alt="image-video"
-						/>
+						<img class="w-100" id="post_img" :src="post.attachment" alt="image-video" />
 					</div>
 					<p class="text-sm py-2">{{ post.content }}</p>
 				</div>
@@ -68,7 +62,7 @@
 				</div>
 				<form @submit.prevent="submitCom()" class="mt-2 d-flex flex-column">
 					<div class="d-flex flex-column">
-						<textarea type="text" v-model="content" placeholder="Mettez un commentaire..." rows="3" class="mt-3 col-12" />
+						<textarea type="text" v-model="comment" placeholder="Mettez un commentaire..." rows="3" class="mt-3 col-12" />
 						<button :class="{ 'button--disabled': !validatedFields }" name="send-comment" class="btn mt-3">
 							<span v-if="submitStatus == 'loading'">Envoie...</span>
 							<span v-else>Publier</span>
