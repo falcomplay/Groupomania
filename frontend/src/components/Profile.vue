@@ -7,8 +7,9 @@
 						<div class="card-title mb-4">
 							<div class="d-flex justify-content-start align-items-center">
 								<div class="image-container">
-									<img src="../assets/defaultavatar.png" class="align-items-center avatar rounded-full mb-2" />
-									<div class="middle">
+									<div class="d-flex flex-column align-items-center">
+										<img v-if="user.avatar === null" src="../assets/defaultavatar.png" class="avatar rounded-circle mb-2" />
+										<img v-else :src="user.avatar" alt="image-profil" class="avatar rounded-circle mb-2" />
 										<label class="mb-3 text-primary" for="avatar" />
 										<input type="file" ref="image" v-on:change="handleFileUpload()" />
 									</div>
@@ -44,6 +45,7 @@
 												<label style="font-weight: bold">Prénom</label>
 											</div>
 											<div class="col-md-8 col-6">{{ user.firstname }}</div>
+											<input v-model="firstname" type="firstname" name="firstname" id="firstname" />
 										</div>
 										<hr />
 
@@ -52,13 +54,18 @@
 												<label style="font-weight: bold">Bio</label>
 											</div>
 											<div class="col-md-8 col-6">{{ user.bio }}</div>
+											<input v-model="bio" type="bio" name="bio" id="bio" />
 										</div>
 										<hr />
 									</div>
-									<div class="px-4 py-3 text-right sm:px-6">
-										<button name="publier" @click="submit()" class="h-10 px-4 text-white font-semibold bg-red-600 hover:bg-red-400 focus:outline-none rounded-full">
-											<span v-if="submitStatus == 'loading'">Envoie...</span>
-											<span v-else>Publier</span>
+									<div class="d-flex justify-content-around px-4 py-3">
+										<button name="delete" @click="deleteAccount(user)" class="btn btn-alert">
+											<span v-if="submitStatus == 'loading'">Suppression...</span>
+											<span v-else>Supprimer le compte</span>
+										</button>
+										<button name="publier" @click="submit()" class="btn">
+											<span v-if="submitStatus == 'loading'">Mise à jour...</span>
+											<span v-else>Modifier</span>
 										</button>
 									</div>
 								</div>
@@ -83,6 +90,7 @@ export default {
 	data: function () {
 		return {
 			mode: "userProfile",
+
 			submitStatus: null,
 			firstname: "",
 			lastname: "",
@@ -94,6 +102,9 @@ export default {
 	computed: {
 		...mapState({
 			user: "userInfos",
+			users() {
+				return this.$store.state.users;
+			},
 		}),
 	},
 	methods: {
@@ -124,11 +135,11 @@ export default {
 				this.$router.go("/profile");
 			});
 		},
-		deleteAccount: function (user) {
+		deleteAccount(user) {
 			let response = confirm("Êtes-vous sûr de vouloir supprimer ce compte? ");
 			if (response) {
 				this.$store.dispatch("deleteAccount", user);
-				this.$router.push("/userProfileDelete");
+				this.$router.push("/");
 				return;
 			}
 		},
@@ -147,6 +158,9 @@ export default {
 .btn {
 	background-color: #192946;
 	color: white;
+}
+.btn-alert {
+	background-color: #b12f38;
 }
 textarea {
 	resize: none;

@@ -44,9 +44,9 @@
 									})
 									.join('')
 							"
-							class="avatar rounded-full"
+							class="avatar rounded-circle"
 						/>
-						<img v-else src="../assets/defaultavatar.png" class="align-items-center avatar rounded-full" />
+						<img v-else src="../assets/defaultavatar.png" class="align-items-center avatar rounded-circle" />
 						<div class="ml-3 d-flex justify-content-start">{{ post.userName }}</div>
 						<div class="ml-auto mr-2 d-flex justify-content-end">{{ dateTime(post.createdAt) }}</div>
 						<button v-if="user.id == post.UserId || user.isAdmin == 1" @click="deletePost(post)" name="delete" class="btn d-flex justify-content-end">x</button>

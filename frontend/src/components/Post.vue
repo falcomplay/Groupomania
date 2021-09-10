@@ -6,20 +6,21 @@
 					v-if="
 						users
 							.map((user) => {
-								if (user.id === post.UserId) return user.avatar;
+								if (user.id === post.userId) return user.avatar;
 							})
 							.join('') !== (null || '')
 					"
 					:src="
 						users
 							.map((user) => {
-								if (user.id === post.UserId) return user.avatar;
+								if (user.id === post.userId) return user.avatar;
 							})
 							.join('')
 					"
-					class="avatar rounded-full"
+					class="avatar rounded-circle"
+					alt="avatar"
 				/>
-				<img v-else src="../assets/defaultavatar.png" class="align-items-center avatar rounded-full" />
+				<img v-else src="../assets/defaultavatar.png" alt="avatar" class="align-items-center avatar rounded-full" />
 				<div class="ml-3 d-flex justify-content-start">{{ post.userName }}</div>
 				<div class="ml-auto mr-2 d-flex justify-content-end">{{ dateTime(post.createdAt) }}</div>
 				<button v-if="user.id == post.UserId || user.isAdmin == 1" @click="deletePost(post)" name="delete" class="btn d-flex justify-content-end">x</button>
@@ -37,21 +38,21 @@
 								v-if="
 									users
 										.map((user) => {
-											if (user.id === comment.userId) return user.profilePhoto;
+											if (user.id === comment.userId) return user.avatar;
 										})
 										.join('') !== (null || '')
 								"
 								:src="
 									users
 										.map((user) => {
-											if (user.id === comment.userId) return user.profilePhoto;
+											if (user.id === comment.userId) return user.avatar;
 										})
 										.join('')
 								"
-								alt="image-profil"
-								class="ml-2 h-10 w-10 rounded-full flex-none"
+								alt="avatar"
+								class="avatar rounded-circle"
 							/>
-							<img v-else src="../assets/defaultavatar.png" alt="image-profil" class="align-items-center avatar rounded-full" />
+							<img v-else src="../assets/defaultavatar.png" alt="avatar" class="align-items-center avatar rounded-full" />
 						</div>
 						<div class="flex flex-col ml-3">
 							<p class="mb-2">{{ comment.userName }}</p>
