@@ -113,11 +113,11 @@ export default new Vuex.Store({
 				instance
 					.post("/auth/signup", userInfos)
 					.then(function (response) {
-						commit("setStatus", "created");
+						commit("setStatus", "signup");
 						resolve(response);
 					})
 					.catch(function (error) {
-						commit("setStatus", "error_create");
+						commit("setStatus", "error_signup");
 						reject(error);
 					});
 			});

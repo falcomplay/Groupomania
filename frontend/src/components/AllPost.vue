@@ -1,23 +1,26 @@
 <template>
-	<div class="w-full flex-1 md:w-1/2 h-screen md:overflow-y-scroll">
+	<div class="allpost">
 		<div class="px-4 py-3">
-			<div class="card col-12 col-lg-8 col-xl-6 mx-auto bg-white py-4">
+			<div class="card col-12 col-lg-8 col-xl-6 mx-auto py-4">
+				<h1></h1>
 				<form @submit.prevent="submit">
 					<div>
-						<input v-model="title" id="title" type="text" placeholder="Titre" class="mt-3 col-lg-8" />
+						<label for="title" class="sr-only">Titre</label>
+						<input v-model="title" id="title" type="text" placeholder="Donner un titre à votre poste..." class="col-lg-8" />
 					</div>
 					<div class="flex">
 						<div>
-							<textarea v-model="content" id="content" placeholder="Quoi de neuf ?" maxlength="150" rows="3" class="mt-3 col-lg-8" />
+							<label for="content" class="sr-only">Contenu</label>
+							<textarea v-model="content" id="content" placeholder="Décrivez votre poste..." maxlength="150" rows="3" class="mt-3 col-lg-8" />
 						</div>
-						<div class="pb-9 flex items-center">
-							<label class="mb-3 text-primary" for="attachment" />
-							<input type="file" ref="image" v-on:change="handleFileUpload()" />
+						<div class="flex items-center">
+							<label for="attachment" class="sr-only">Pièce-jointe</label>
+							<input type="file" ref="image" id="attachment" v-on:change="handleFileUpload()" />
 						</div>
 					</div>
 					<div v-if="submitStatus == 'error_create'" class="alert">Veuillez tout remplir !</div>
 					<div class="mt-3">
-						<button :class="{ 'button--disabled': !validatedFields }" name="send-post" class="btn px-4">
+						<button name="send-post" class="btn px-4">
 							<span v-if="submitStatus == 'loading'">Envoie...</span>
 							<span v-else>Publier</span>
 						</button>
@@ -44,15 +47,16 @@
 									})
 									.join('')
 							"
+							alt="avatar"
 							class="avatar rounded-circle"
 						/>
-						<img v-else src="../assets/defaultavatar.png" class="align-items-center avatar rounded-circle" />
+						<img v-else src="../assets/defaultavatar.png" alt="avatar" class="align-items-center avatar rounded-circle" />
 						<div class="ml-3 d-flex justify-content-start">{{ post.userName }}</div>
 						<div class="ml-auto mr-2 d-flex justify-content-end">{{ dateTime(post.createdAt) }}</div>
 						<button v-if="user.id == post.UserId || user.isAdmin == 1" @click="deletePost(post)" name="delete" class="btn d-flex justify-content-end">x</button>
 					</div>
 					<div>
-						<h2 class="text-base text-center py-2">{{ post.title }}</h2>
+						<h2 class="text-center py-2">{{ post.title }}</h2>
 						<div class="flex align-center justify-center">
 							<img
 								class="w-100"
@@ -62,7 +66,7 @@
 								alt="image-video"
 							/>
 						</div>
-						<p class="text-sm py-2">{{ post.content }}</p>
+						<p class="py-2">{{ post.content }}</p>
 					</div>
 					<div>
 						<router-link :to="`/post/${post.id}`" class="btn">Lire les commentaires</router-link>
@@ -97,13 +101,6 @@ export default {
 				return this.$store.state.posts;
 			},
 		}),
-		validatedFields: function () {
-			if (this.title != "" && this.content != "") {
-				return true;
-			} else {
-				return false;
-			}
-		},
 	},
 	methods: {
 		dateTime(value) {

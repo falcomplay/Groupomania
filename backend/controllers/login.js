@@ -15,9 +15,7 @@ exports.signup = function (req, res) {
 	const bio = req.body.bio;
 
 	if (!PASSWORD_REGEX.test(password)) {
-		return res
-			.status(403)
-			.json({ error: "mot de passe invalide (doit comprendre une majuscule, une minuscule, un chiffre, et un caractère spécial. Il doit être compris entre 8-100 caractères.)" });
+		return res.status(403).json({ error: "mot de passe invalide (doit comprendre une majuscule, une minuscule, un chiffre. Il doit être compris entre 8-100 caractères.)" });
 	}
 
 	models.User.findOne({
